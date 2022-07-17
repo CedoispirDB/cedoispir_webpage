@@ -1,5 +1,5 @@
 import React from 'react'
-import "./GamePage.css"
+import "./Styles/GamePage.css"
 
 function GamePage() {
     return (
