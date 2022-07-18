@@ -57,10 +57,6 @@ class PlayerMovement {
 
 
 
-
-
-
-
         } else if (this.game.waiting && this.game.dead) {
             if (e.clientY >= this.canvas.height - this.player.getHeight() - 10) {
                 this.game.dead = false;

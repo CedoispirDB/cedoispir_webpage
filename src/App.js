@@ -1,11 +1,12 @@
-import React from 'react'
-import GamePage from '.Components/Page/GamePage';
+import { useLayoutEffect } from 'react';
+import GamePage from './Components/Pages/GamePage';
 import Game from './Game/Main/Game';
 
 function App() {
-    window.onload = () => {
+
+    useLayoutEffect(() => {
         new Game().run();
-    }
+    })
 
     return (
         <>

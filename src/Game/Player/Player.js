@@ -1,3 +1,5 @@
+import HealthBar from "./HealthBar";
+
 class Player {
 
     constructor(game, posX, posY, playerWidth, playerHeight, canvas,
@@ -11,14 +13,15 @@ class Player {
         this.canvas = canvas;
         this.canvasPosX = canvasPosX;
         this.context = context;
-
-        this.playerImg = new Image();
-        this.playerImg.src = require("../Resources/player.png");
         this.handler = handler;
         this.health = health;
 
-        console.log(this.playerImg)
+        this.playerImg = new Image();
+        this.playerImg.src = require("../Resources/player.png");
 
+        this.healthBar = new HealthBar(context, canvas);
+        
+       
 
         this.theta = Math.PI * 3 / 2;
         this.lastPosX = 0;
@@ -30,6 +33,22 @@ class Player {
 
         this.velX = 0;
         this.velY = 1;
+
+        this.hit = false;
+        this.hitTime = 0;
+        this.alpha = 1;
+
+        this.lastTime = 0;
+
+    }
+
+    setHealth(health) {
+
+        this.health = health;
+    
+        this.healthBar.resetHelth();
+        this.hit = false;
+
     }
 
     setVelX(velX) {
@@ -88,24 +107,41 @@ class Player {
         return this.posY;
     }
 
-    render() {
-
+    render(time) {
 
         // this.posY += this.velY;
         // this.posX += this.velX;
 
         // check collision
         this.handler.getEnemies().forEach(enemy => {
-            if (this.intersect(enemy.posX, enemy.posY, enemy.width, enemy.height)) {
+            if (this.intersect(enemy.posX, enemy.posY, enemy.zombieWidth, enemy.zombieHeight)) {
                 // this.game.die();
+                if (!this.hit) {
+                    this.healthBar.takeDamage();
+                    this.health -= 2;
+                    this.hit = true;
+                    this.hitTime = time;
+                    this.lastTime = time;
+                }
             }
         });
 
         this.handler.getObjects().forEach(object => {
-            // if (this.collide(object.posX, object.posY, object.width, object.height)) {
-                // console.log("collide")
-            // }
+            if (this.intersect(object.posX, object.posY, object.width, object.height)) {
+                // this.game.die();
+                if (!this.hit) {
+                    this.healthBar.takeDamage();
+                    this.health -= 2;
+                    this.hit = true;
+                    this.hitTime = time;
+                    this.lastTime = time;
+                }
+            }
         })
+
+        if(this.health <= 0) {
+            this.game.die();
+        }
 
         // player movement
 
@@ -126,8 +162,25 @@ class Player {
 
 
         // console.log(this.posX, this.posY)
+        // console.log(this.hit)
+        if (this.hit) {
+            // console.log(time, this.hitTime)
+            if (Math.round(time - this.hitTime) > 1500) {
+                this.hit = false;
+                this.alpha = 1;
+            } else { 
+                // console.log(time, this.lastTime, Math.round(time - this.lastTime))
+                if (Math.round(time - this.lastTime) > 175) {
+                    this.alpha = this.alpha < 1 ? 1 : 0.7;
+                    this.lastTime = time;
+                    // console.log(this.alpha)
+                }
+            }
+        }        // console.log(this.alpha)
+        this.context.globalAlpha = this.alpha;
         this.context.drawImage(this.playerImg, this.posX, this.posY, this.playerWidth, this.playerHeight);
-
+        this.healthBar.render();
+        
         // if (!this.intersecting) {
         //     this.context.drawImage(this.playerImg, this.posX, this.posY, this.playerWidth, this.playerHeight);
         //     this.lastPosX = this.posX;
@@ -145,11 +198,12 @@ class Player {
 
     renderDisplay() {
         this.context.drawImage(this.playerImg, this.posX, this.posY, this.playerWidth, this.playerHeight);
+        this.healthBar.render();
+
     }
 
 
     intersect(x, y, width, height) {
-
         if (((this.posX >= x && this.posX <= x + width) || (this.posX + this.playerWidth <= x + width && this.posX + this.playerWidth >= x)) &&
             ((this.posY >= y && this.posY <= y + height) || (this.posY + this.playerHeight <= y + height && this.posY + this.playerHeight >= y))) {
             return true;
@@ -160,9 +214,9 @@ class Player {
 
     collide(x, y, width, height) {
         if (this.intersect(x, y, width, height)) {
-        
+
             console.log(y + height, this.posY)
-            if (x >= this.posX + this.playerWidth&& y < this.posY + this.playerHeight || y + height < this.posY) {
+            if (x >= this.posX + this.playerWidth && y < this.posY + this.playerHeight || y + height < this.posY) {
                 console.log("from the right");
             } else if (x + width <= this.posX) {
                 console.log("from the left");

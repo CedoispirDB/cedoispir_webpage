@@ -12,7 +12,7 @@ class Spanwer {
         this.enemyId = 0;
         this.carPositions = [];
 
-        this.vehicleOptions = ["../Resources/redCar.png", "../Resources/blueCar.png", "../Resources/greenCar.png","../Resources/black-redCar.png"]
+        this.vehicleOptions = [require("../Resources/black-yellow-car.png"), require("../Resources/black-blue-car.png"), require("../Resources/black-red-car.png")]
     }
 
     createWave(amount) {
@@ -85,7 +85,7 @@ class Spanwer {
             this.carPositions.push([x, x + carWidth])
 
             // require(this.vehicleOptions[Math.floor(Math.random() * this.vehicleOptions.length)])
-            this.handler.addObject(new Car(this.context, this.canvas, this.handler, carWidth, 124, x, -124 * 2, (Math.random() * 2) + 3, require("../Resources/black-redCar.png"), this.objectId));
+            this.handler.addObject(new Car(this.context, this.canvas, this.handler, carWidth, 124, x, -124 * 2, (Math.random() * 2) + 4, this.vehicleOptions[Math.floor(Math.random() * this.vehicleOptions.length)], this.objectId));
             this.objectId++;
 
 

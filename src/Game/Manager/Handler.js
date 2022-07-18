@@ -35,7 +35,7 @@ class Handler {
         // }
     }
 
-    renderEnemies(time) {
+    renderEnemies(time, timeMs) {
         // console.log("length: ", this.enemies.length)
         if (this.enemies.length > 0) {
             // console.log("here")
@@ -58,7 +58,7 @@ class Handler {
             for (let i = this.enemies.length - 1; i >= 0; i--) {
 
                 // console.log("rendering at index", i)
-                this.enemies[i].render(time);
+                this.enemies[i].render(time, timeMs);
             }
         }
 
@@ -130,8 +130,8 @@ class Handler {
 
 
 
-    render(time) {
-        this.renderEnemies(time);
+    render(time, timeMs) {
+        this.renderEnemies(time, timeMs);
         this.renderObjects();
     }
 

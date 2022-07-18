@@ -8,6 +8,7 @@ import Spanwer from "../Manager/Spawner.js";
 
 import Car from "../Scenario/Car.js";
 import BasicZombie from "../Enemies/BasicZombie.js";
+import CreateFrames from "../Render/CreateFrames.js";
 
 class Game {
 
@@ -31,7 +32,7 @@ class Game {
         this.handler = new Handler();
         this.spawner = new Spanwer(this, this.handler, this.canvas, this.canvasPosX, this.context);
 
-        this.player = new Player(this, this.canvas.width / 2, this.canvas.height - 42, 40, 42, this.canvas, this.canvasPosX, this.context, this.handler, 10);
+        this.player = new Player(this, this.canvas.width / 2, this.canvas.height - 42, 40, 42, this.canvas, this.canvasPosX, this.context, this.handler, 20);
 
 
         this.gameDisplay = new GameDisplay(this, this.player, this.os, this.canvas);
@@ -48,16 +49,17 @@ class Game {
             this.context.drawImage(this.displayImg, 0, 0, this.canvas.width, this.canvas.height)
         }
 
+     
 
         this.init();
     }
 
     init() {
-        this.running = false;
+        this.running = true;
         this.pause = false;
         this.dead = false;
         this.waiting = false;
-        this.started = false;
+        this.started = true;
         // this.canvasHandler.showDisplayImage();
         this.gameDisplay.createPauseMenu();
         this.playerMovement.setEvents();
@@ -111,11 +113,12 @@ class Game {
         // this.handler.addObject(new Car(this.context, this.canvas, this.handler, 52, 124, this.canvas.width / 2 - 52 * 2, this.canvas.height / 2 - 124, 1, "../Resources/car.png", 2))
         // this.handler.addObject(new Car(this.context, this.canvas, this.handler, 52, 124, this.canvas.width - 124, this.canvas.height / 2 - 124, 1, "../Resources/car.png", 2))
         // this.handler.addObject(new Car(this.context, this.canvas, this.handler, 52, 124, this.canvas.width / 2, this.canvas.height - 124, 0, "../Resources/car.png", 2))
-        // this.handler.addObject(new Car(this.context, this.canvas, this.handler, 52, 124, this.canvas.width / 2, 0, 5, "../Resources/car.png", 2))
-        
-        // this.handler.addEnemy(new BasicZombie(this, this.context, this.canvas, this.handler, 40, 42, this.canvas.width / 2, this.canvas.height / 2 - 124 * 2, 0, 5, this.enemyId, 0, "../Resources/zombie.png"));
+        // this.handler.addObject(new Car(this.context, this.canvas, this.handler, 52, 124, this.canvas.width / 2, 124 * 2, 0, require("../Resources/black-red-car.png"), 2))
+
+        // this.handler.addEnemy(new BasicZombie(this, this.context, this.canvas, this.handler, 40, 42, 0,127 , 0, 0, this.enemyId, 0, require("../Resources/zombie.png")));
+        // this.handler.addEnemy(new BasicZombie(this, this.context, this.canvas, this.handler, 40, 42, 40, 169 ,5, 0, this.enemyId, 0, require("../Resources/zombie.png")));
         // this.handler.addEnemy(new BasicZombie(this, this.context, this.canvas, this.handler, 40, 42, this.canvas.width / 2 - 52 /2, this.canvas.height / 2 + 124, 0, -4, this.enemyId, 0, "../Resources/zombie.png"));
-        // this.handler.addEnemy(new BasicZombie(this, this.context, this.canvas, this.handler, 40, 42, this.canvas.width / 2, this.canvas.height / 2,0, -2, this.enemyId, 0, "../Resources/zombie.png"));
+        // this.handler.addEnemy(new BasicZombie(this, this.context, this.canvas, this.handler, 40, 42, this.canvas.width / 2, this.canvas.height / 2, 0, 0, this.enemyId, 0, require("../Resources/zombie.png")));
 
 
         // this.handler.addObject(new Car(this.context, this.canvas, this.handler, 60, 124, this.canvas.width / 2, -124 * 2, "../Resources/car.png", 3))
@@ -155,6 +158,7 @@ class Game {
         if (this.started) {
 
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.context.globalAlpha = 1;
 
 
             if (!this.pause && !this.dead) {
@@ -169,7 +173,7 @@ class Game {
                         // this.handler.removeEnemy(1)
                         // console.log(this.handler.enemies.map((e) => {return e.id}));
                         // this.spawner.createWave(4);
-                        this.spawner.createWave(4);
+                        this.spawner.createWave(Math.round(this.canvas.width / 100));
                     } else if (/*his.timeSec % 5 === 0*/ this.timeSec === 1) {
                         // console.log(this.timeSec);
                         // this.spawner.createObjects(Math.round(this.canvas.width / 100));
@@ -182,9 +186,10 @@ class Game {
 
                 this.background.render();
 
-                this.handler.render(this.timeSec);
+                this.handler.render(this.timeSec, time);
 
-                this.player.render();
+
+                this.player.render(time);
 
 
             } else {

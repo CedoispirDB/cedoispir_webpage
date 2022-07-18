@@ -144,6 +144,7 @@ class GameDisplay {
         this.playAgainButton.classList.toggle("hide");
         this.playAgainMessage.classList.toggle("hide");
         this.game.waiting = true;
+        this.player.setHealth(20);
 
 
     }

@@ -22,6 +22,17 @@ class BasicZombie {
         // console.log(id)
         this.temp = this.posY;
 
+        this.sprite = new Image();
+        this.sprite.src = require("../Resources/basic-zombie-sprite.png");
+
+        this.frame = 1;
+
+        this.lastTime = 0;
+        this.can = true;
+
+        this.x = 0;
+        this.y = 0;
+
     }
 
 
@@ -29,7 +40,7 @@ class BasicZombie {
         return this.velY;
     }
 
-    render(time) {
+    render(time, timeMs) {
         if (!this.game.pause) {
             this.posY += this.velY;
             this.posX += this.velX;
@@ -68,7 +79,62 @@ class BasicZombie {
 
         }
 
-        this.context.drawImage(this.zombieImg, this.posX, this.posY, this.zombieWidth, this.zombieHeight);
+        if (Math.round(timeMs - this.lastTime) > 200) {
+            if (this.velX > 0) {
+                switch (this.frame) {
+                    case 1:
+                        this.x = 0;
+                        this.y = 0;
+                        break;
+                    case 2:
+                        this.x = 33;
+                        this.y = 0;
+                        break;
+                    case 3:
+                        this.x = 66;
+                        this.y = 0;
+                        break;
+                }
+            } else if (this.velX < 0) {
+                switch (this.frame) {
+                    case 1:
+                        this.x = 0;
+                        this.y = 32;
+                        break;
+                    case 2:
+                        this.x = 33;
+                        this.y = 32;
+                        break;
+                    case 3:
+                        this.x = 65;
+                        this.y = 32;
+                        break;
+                }
+            }
+
+            this.frame++;
+            if (this.frame > 3) {
+                this.frame = 1;
+            }
+            this.lastTime = timeMs;
+
+        }
+
+        if (this.can) {
+            if (!isNaN(time)) {
+                this.lastTime = timeMs;
+                this.can = false;
+            }
+        }
+
+        this.context.drawImage(this.sprite, this.x, this.y, 30, 31, this.posX, this.posY, this.zombieWidth, this.zombieHeight);
+
+
+
+        // } else {
+
+        //     this.context.drawImage(this.zombieImg, this.posX, this.posY, this.zombieWidth, this.zombieHeight);
+        // }
 
         // this.context.font = '50px serif';
         // this.context.fillText(this.id, this.posX, this.posY);
@@ -107,21 +173,21 @@ class BasicZombie {
             // }
 
             if (this.posY < y && this.posX + this.zombieWidth > x && this.posX < x + width) {
-                console.log("Top");
+                // console.log("Top");
                 this.posY -= vel + 2;
                 this.velY = this.velY < 0 ? this.velY - 1 : this.velY + 1;
                 this.velY *= -1;
             } else if (this.posX < x && this.posY + this.zombieHeight > y && this.posY < y + height) {
-                console.log("Right");
+                // console.log("Right");
                 this.posX -= 1;
                 this.velX *= -1;
             } else if (this.posY + this.zombieHeight > y + height && this.posX + width > x && this.posX < x + width) {
-                console.log("Bottom");
+                // console.log("Bottom");
                 this.posY += vel + 2;
                 this.velY = this.velY < 0 ? this.velY - 1 : this.velY + 1;
                 this.velY *= -1;
             } else if (this.posX + this.zombieWidth > x + width && this.posY + this.zombieHeight > y && this.posY < y + height) {
-                console.log("Left")
+                // console.log("Left")
                 this.posX += 1;
                 this.velX *= -1;
             }

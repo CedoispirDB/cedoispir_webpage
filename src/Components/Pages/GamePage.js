@@ -1,5 +1,5 @@
 import React from 'react'
-import "./Styles/GamePage.css"
+import "../Styles/GamePage.css"
 
 function GamePage() {
     return (
@@ -26,7 +26,7 @@ function GamePage() {
                 <button className="play_again_button">Play again</button>
                 <div className="play_again_message hide"> &#60;Hover over the player to try again&#62;</div>
             </div>
-            <div className="start_container">
+            <div className="start_container hide">
                 <button className="start_button text">Click here to begin</button>
             </div>
 
