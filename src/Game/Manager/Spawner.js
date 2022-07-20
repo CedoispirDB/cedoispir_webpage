@@ -23,7 +23,6 @@ class Spanwer {
 
     createWave(time) {
         if (this.prevTime !== time) {
-            console.log(time);
             if (time % 6 === 0) {
                 if (this.waitVehicle) {
                     this.waitVehicle = false;
@@ -52,7 +51,6 @@ class Spanwer {
             this.handler.addObject(new HealthPotion(this.context, (Math.random() * (this.canvas.width - 10)) + 5, -19, 14, 19, "potion", this.objectId));
             this.objectId++;
         }
-        console.log(this.handler.objects)
 
     }
 

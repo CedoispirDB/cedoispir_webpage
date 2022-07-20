@@ -48,6 +48,10 @@ class Player {
 
         this.gotPotion = false;
 
+        this.deathPosX = 0;
+        this.deathPosY = 0;
+
+
     }
 
     setHealth(health) {
@@ -115,6 +119,14 @@ class Player {
         return this.posY;
     }
 
+    getDeathX() {
+        return this.deathPosX;
+    }
+    
+    getDeathY() {
+        return this.deathPosY;
+    }
+
     render(time) {
 
         // this.posY += this.velY;
@@ -167,6 +179,8 @@ class Player {
 
         if (this.health <= 0) {
             this.game.die();
+            this.deathPosX = this.posX;
+            this.deathPosY = this.posY;
         }
 
         // player movement

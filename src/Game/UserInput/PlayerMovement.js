@@ -5,24 +5,37 @@ class PlayerMovement {
         this.canvas = canvas;
         this.canvasPosX = canvasPosX;
         this.gameDisplay = gameDisplay;
+
+        this.isInside = false;
+        this.firsRotation = true;
     }
 
     handleTouchMovement(e) {
         if (e.touches) {
             if (this.game.running && !this.game.dead && !this.game.pause) {
-                
-                
-                
+
+
+
                 this.player.setPosX(e.touches[0].clientX);
                 this.player.setPosY(e.touches[0].clientY - 80);
 
 
             } else if (this.game.waiting && this.game.dead) {
                 if (e.touches[0].clientY >= this.canvas.height - this.player.getHeight() - 10) {
-                    this.game.dead = false;
-                    this.game.running = true;
-                    this.game.waiting = false;
-                    this.gameDisplay.hoverOver();
+                    if (!this.isInside && !this.firsRotation) {
+                        this.game.dead = false;
+                        this.game.running = true;
+                        this.game.waiting = false;
+                        this.gameDisplay.hoverOver();
+                    }
+                    if (this.firsRotation) {
+                        this.isInside = true;
+                    }
+                } else {
+                    if (this.firsRotation) {
+                        this.firsRotation = false;
+                        this.isInside = false;
+                    }
                 }
             } else if (this.game.waiting && this.game.pause) {
                 let x = e.touches[0].clientX;
@@ -65,12 +78,29 @@ class PlayerMovement {
 
         } else if (this.game.waiting && this.game.dead) {
             if (e.clientY >= this.canvas.height - this.player.getHeight() - 10) {
-                this.game.dead = false;
-                this.game.running = true;
-                this.game.waiting = false;
-                this.gameDisplay.hoverOver();
+                if (!this.isInside && !this.firsRotation) {
+                    this.game.dead = false;
+                    this.game.running = true;
+                    this.game.waiting = false;
+                    this.gameDisplay.hoverOver();
+                }
+                if (this.firsRotation) {
+                    this.isInside = true;
+                }
 
+            } else {
+                if (this.firsRotation) {
+                    this.firsRotation = false;
+                    this.isInside = false;
+                }
             }
+
+            console.log(this.isInside)
+
+            // if (e.clientY >= this.canvas.height - this.player.getHeight() - 10) {
+
+
+            // }
 
         } else if (this.game.waiting && this.game.pause) {
 

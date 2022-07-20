@@ -18,14 +18,14 @@ class Game {
     static pause;
     static running;
     static dead;
-    static maxWidth;
+    static maxheight;
     static waiting;
     static started;
 
     constructor() {
         this.os = this.getMobileOperatingSystem();
 
-        this.maxWidth = window.screen.height;
+        this.maxheight = window.screen.height;
 
         this.canvasHandler = new CanvasHandler();
         this.canvas = this.canvasHandler.getCanvas();
@@ -128,7 +128,7 @@ class Game {
     }
 
     init() {
-        this.running = true;
+        this.running = false;
         this.pause = false;
         this.dead = false;
         this.waiting = false;
@@ -142,16 +142,18 @@ class Game {
     }
 
     reset() {
-        this.running = true;
+        this.running = false;
         this.pause = false;
         this.dead = false;
         this.waiting = false;
-        this.started = true;
+        this.started = false;
         this.player.setPosX(this.canvas.width / 2);
         this.player.setPosY(this.canvas.height - 42);
         this.player.setHealth(20);
         this.handler.clear();
         this.trackScore = 1;
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
 
     }
 
@@ -184,7 +186,7 @@ class Game {
 
                 this.trackScore += 1 / 25;
 
-                this.spawner.createWave(this.timeSec);
+                // this.spawner.createWave(this.timeSec);
 
                 this.gameDisplay.setScore(Math.floor(this.trackScore));
 

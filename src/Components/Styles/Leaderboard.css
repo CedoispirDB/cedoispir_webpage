@@ -28,6 +28,7 @@
     width: fit-content;
     height: fit-content;
     min-height: 40%;
+    max-height: 57.3%;
     background-color: #171717;
     color: white;
     box-shadow: 0 0 20px 4px #777;
@@ -149,7 +150,7 @@ hr {
 
 }
 
-@media only screen and (max-width: 412px) {
+@media only screen and (max-width: 413px) {
     .leaderboard_box {
         width: 70%;
     }

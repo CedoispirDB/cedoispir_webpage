@@ -5,6 +5,8 @@ class GameDisplay {
     static isfullScreen;
     static fullScreen;
 
+
+
     constructor(game, player, os, canvas, context, canvasPosX) {
         this.game = game;
         this.player = player;
@@ -57,12 +59,14 @@ class GameDisplay {
         }
         window.addEventListener("keypress", (e) => this.handleKeyPressed(e));
         window.addEventListener('scroll', () => this.handleScroll());
+
+        this.currentGameScore = 1;
     }
 
     async callApi() {
-        let score = this.totalScoreText.innerText;
 
-        savePlayerData(document.getElementsByClassName("save_username_input")[0].value, score.substring(score.indexOf(":") + 2))
+
+        savePlayerData(document.getElementsByClassName("save_username_input")[0].value, this.currentGameScore)
             .then((res) => {
                 this.saveScoreContainer.children[2].classList.remove("hide")
                 if (res.data.response === "Error") {
@@ -107,6 +111,10 @@ class GameDisplay {
 
     handleFullScreen() {
 
+        if(!this.game.started) {
+            this.loadDisplayImage();
+        }
+
 
         if (this.os === "unknown") {
 
@@ -114,7 +122,7 @@ class GameDisplay {
                 this.oldHeight = this.canvas.height;
             }
             this.canvas.width = window.screen.width;
-            this.canvas.height = this.game.maxWidth;
+            this.canvas.height = this.game.maxheight;
             this.wrapper.style.height = this.canvas.height + "px"
 
 
@@ -141,15 +149,21 @@ class GameDisplay {
             this.player.setPosX(this.canvas.width / 2);
             this.player.setPosY(this.canvas.height - this.player.getHeight() - 10);
         } else {
-            this.oldHeight = this.canvas.height;
-            this.canvas.height = this.game.maxWidth;
 
-
-
-            if (this.fullScreen) {
-                this.canvas.height = this.oldHeight;
+            if (!this.fullScreen) {
+                this.oldHeight = this.canvas.height;
             }
 
+            this.canvas.height = this.game.maxheight;
+
+
+            this.fullScreen = !this.fullScreen;
+
+
+
+            if (!this.fullScreen) {
+                this.canvas.height = this.oldHeight;
+            }
 
 
             this.canvas.width = window.screen.width;
@@ -189,6 +203,7 @@ class GameDisplay {
             this.pauseButton.classList.toggle("paused")
             this.pauseMenu.classList.toggle("hide");
             this.game.pause = false;
+
             document.body.style.overflow = "auto"
 
 
@@ -196,8 +211,9 @@ class GameDisplay {
         }
 
 
-        if (this.isfullScreen) {
+        if (this.fullScreen) {
             this.toggleFullScreen();
+
         }
 
         this.loadDisplayImage();
@@ -210,7 +226,10 @@ class GameDisplay {
 
 
     setScore(score) {
-        this.currentScore.innerText = score;
+        // if (this.game.running) {
+        //     this.currentGameScore = score;
+        //     this.currentScore.innerText = score;
+        // }
 
 
     }
@@ -250,12 +269,17 @@ class GameDisplay {
         this.continueMessage.classList.toggle("hide");
     }
 
+    setText(x, y ) {
+        this.totalScoreText.innerText = x + " " + y;
+    }
+
 
     loadDeathScreen() {
-        this.totalScoreText.innerText = "Total score: " + this.currentScore.innerText;
+        // this.totalScoreText.innerText = "Total score: " + this.currentGameScore;
+        this.totalScoreText.innerText = "Total score: " + this.currentGameScore;
         this.totalScoreWrapper.classList.remove("hide");
         this.currentScore.classList.add("hide");
-        // this.pauseButton.classList.add("hide");
+        this.pauseButton.classList.add("hide");
         this.game.waiting = true;
 
     }
