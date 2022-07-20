@@ -5,11 +5,11 @@ class HealthBar {
         this.canvas = canvas;
 
         this.heartImg = new Image();
-        this.heartImg.src = require("../Resources/heart.png");
+        this.heartImg.src = require("../Resources/Player/heart.png");
         this.halfHeartImg = new Image();
-        this.halfHeartImg.src = require("../Resources/half-heart.png");
+        this.halfHeartImg.src = require("../Resources/Player/half-heart.png");
         this.deadHeartImg = new Image();
-        this.deadHeartImg.src = require("../Resources/dead-heart.png");
+        this.deadHeartImg.src = require("../Resources/Player/dead-heart.png");
 
 
         this.damageCount = 0;
@@ -66,6 +66,44 @@ class HealthBar {
                 break;
         }
     }
+
+    increaseHealth() {
+        switch (this.damageCount) {
+            case 1:
+                this.currentImg1 = this.heartImg;
+                break;
+            case 2:
+                this.currentImg1 = this.halfHeartImg;
+                break;
+            case 3:
+                this.currentImg2 = this.heartImg;
+                break;
+            case 4:
+                this.currentImg2 = this.halfHeartImg;
+                break;
+            case 5:
+                this.currentImg3 = this.heartImg;
+                break;
+            case 6:
+                this.currentImg3 = this.halfHeartImg;
+                break;
+            case 7:
+                this.currentImg4 = this.heartImg;
+                break;
+            case 8:
+                this.currentImg4 = this.halfHeartImg;
+                break;
+            case 9:
+                this.currentImg5 = this.heartImg;
+                break;
+            case 10:
+                this.currentImg5 = this.halfHeartImg;
+                break;
+        }
+        this.damageCount--;
+    }
+
+
 
 
 

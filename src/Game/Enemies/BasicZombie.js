@@ -8,8 +8,7 @@ class BasicZombie {
         this.zombieHeight = height;
         this.canvas = canvas
         this.context = context;
-        this.zombieImg = new Image();
-        this.zombieImg.src = imgPath;
+
         this.handler = handler;
         this.id = id;
         this.changeTime = changeTime;
@@ -23,7 +22,7 @@ class BasicZombie {
         this.temp = this.posY;
 
         this.sprite = new Image();
-        this.sprite.src = require("../Resources/basic-zombie-sprite.png");
+        this.sprite.src = imgPath;
 
         this.frame = 1;
 
@@ -140,6 +139,10 @@ class BasicZombie {
         // this.context.fillText(this.id, this.posX, this.posY);
     }
 
+    renderDisplay() {
+        this.context.drawImage(this.sprite, this.x, this.y, 30, 31, this.posX, this.posY, this.zombieWidth, this.zombieHeight);
+    }
+
     intersect(x, y, width, height) {
 
         if (((this.posX >= x && this.posX <= x + width) || (this.posX + this.zombieWidth <= x + width && this.posX + this.zombieWidth >= x)) &&
@@ -192,10 +195,6 @@ class BasicZombie {
                 this.velX *= -1;
             }
         }
-    }
-
-    renderDisplay() {
-        this.context.drawImage(this.zombieImg, this.posX, this.posY, this.zombieWidth, this.zombieHeight);
     }
 
 }

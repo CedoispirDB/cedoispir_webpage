@@ -1,5 +1,5 @@
 class Car {
-    constructor(context, canvas, handler, width, height, posX, posY, vel, imgPath, id) {
+    constructor(context, canvas, handler, width, height, posX, posY, vel, imgPath, id, type) {
         this.context = context;
         this.canvas = canvas;
         this.handler = handler;
@@ -8,6 +8,7 @@ class Car {
         this.posX = posX;
         this.posY = posY;
         this.id = id;
+        this.type = type;
 
         this.carImg = new Image();
         this.carImg.src = imgPath;

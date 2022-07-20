@@ -10,8 +10,13 @@ class PlayerMovement {
     handleTouchMovement(e) {
         if (e.touches) {
             if (this.game.running && !this.game.dead && !this.game.pause) {
+                
+                
+                
                 this.player.setPosX(e.touches[0].clientX);
-                this.player.setPosY(e.touches[0].clientY);
+                this.player.setPosY(e.touches[0].clientY - 80);
+
+
             } else if (this.game.waiting && this.game.dead) {
                 if (e.touches[0].clientY >= this.canvas.height - this.player.getHeight() - 10) {
                     this.game.dead = false;
@@ -34,8 +39,9 @@ class PlayerMovement {
 
                 }
             }
-
-            e.preventDefault();
+            if (this.game.started) {
+                e.preventDefault();
+            }
         }
 
 
@@ -49,8 +55,8 @@ class PlayerMovement {
                 offSet = 0;
             }
 
-           
-           
+
+
             this.player.setPosX(e.clientX - offSet)
             this.player.setPosY(e.clientY)
 
@@ -67,11 +73,18 @@ class PlayerMovement {
             }
 
         } else if (this.game.waiting && this.game.pause) {
-            let x = e.clientX - this.canvasPosX;
+
+            let offSet = this.canvasPosX;
+            if (this.gameDisplay.fullScreen) {
+                offSet = 0;
+            }
+            let x = e.clientX - offSet;
             let y = e.clientY;
             // console.log(x - this.canvasPosX, this.player.getPosX() )                    console.log("here 1");
 
             // console.log("here 0");
+
+            console.log(x, this.player.getPosX());
 
             if (x > this.player.getPosX() && x < this.player.getPosX() + this.player.getWidth() &&
                 y > this.player.getPosY() && y < this.player.getPosY() + this.player.getHeight()) {

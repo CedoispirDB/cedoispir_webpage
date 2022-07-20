@@ -1,22 +1,33 @@
+import { savePlayerData } from "../../ApiHandler";
+
 class GameDisplay {
 
     static isfullScreen;
     static fullScreen;
 
-    constructor(game, player, os, canvas) {
+    constructor(game, player, os, canvas, context, canvasPosX) {
         this.game = game;
         this.player = player;
         this.os = os;
         this.canvas = canvas;
+        this.context = context;
+        this.canvasPosX = canvasPosX;
 
+        this.savedData = false;
 
+        document.getElementsByClassName("save_score_button")[0].addEventListener("click", () => {
+            // console.log(document.getElementsByClassName("save_username_input")[0].value);
+            if (!this.savedData) {
+                this.callApi();
+            }
+        });
+
+        this.saveScoreContainer = document.getElementsByClassName("save_score_container")[0];
 
         this.currentScore = document.getElementsByClassName("current_score")[0];
 
         this.totalScoreWrapper = document.getElementsByClassName("total_score_wrapper")[0];
         this.totalScoreText = document.getElementsByClassName("total_score")[0];
-        this.playAgainButton = document.getElementsByClassName("play_again_button")[0];
-        this.playAgainMessage = document.getElementsByClassName("play_again_message")[0];
 
         this.startContainer = document.getElementsByClassName("start_container")[0];
         this.startGameButton = document.getElementsByClassName("start_button")[0];
@@ -29,7 +40,6 @@ class GameDisplay {
         this.continueMessage = document.getElementsByClassName("pause_continue_msg")[0];
 
         this.startGameButton.addEventListener("click", () => this.start());
-        this.playAgainButton.addEventListener("click", () => this.playAgain());
         this.pauseButton.addEventListener("click", () => this.pause());
 
 
@@ -38,81 +48,164 @@ class GameDisplay {
 
 
         this.fullScreen = false;
+        this.oldHeight = 0;
 
-        let oldHeight;
+        if (this.os !== "unknown") {
+            window.addEventListener("fullscreenchange", () => this.handleFullScreen());
+        } else if (this.os === "unknown") {
+            window.addEventListener("resize", () => this.handleResize());
+        }
+        window.addEventListener("keypress", (e) => this.handleKeyPressed(e));
+        window.addEventListener('scroll', () => this.handleScroll());
+    }
 
-        window.addEventListener("fullscreenchange", () => {
+    async callApi() {
+        let score = this.totalScoreText.innerText;
 
-            if (this.os === "unknown") {
-
-                if (!this.fullScreen) {
-                    oldHeight = this.canvas.height;
+        savePlayerData(document.getElementsByClassName("save_username_input")[0].value, score.substring(score.indexOf(":") + 2))
+            .then((res) => {
+                this.saveScoreContainer.children[2].classList.remove("hide")
+                if (res.data.response === "Error") {
+                    console.log(this.saveScoreContainer.children[0]);
+                    this.saveScoreContainer.children[2].innerText = "Name already in use"
+                } else {
+                    this.saveScoreContainer.children[2].innerText = "Score saved"
+                    this.savedData = true;
                 }
-                console.log(oldHeight)
-                this.canvas.width = window.screen.width;
-                this.canvas.height = this.game.maxWidth;
-                this.wrapper.style.height = this.canvas.height + "px"
+            });
 
-                console.log(this.game.maxWidth)
+    }
+
+    handleKeyPressed(e) {
+        let key = e.key.toLowerCase();
+        if (this.game.running && !this.game.dead) {
+            if (key === "p") {
+                this.pause();
+
+            }
+        }
+        // if (key === "f") {
+        //     // if (!this.game.running) {
+        //     this.toggleFullScreen();
+        //     // }
+
+        // }
+    }
+
+    handleResize() {
+        if (!this.fullScreen) {
+            if (!this.game.started) {
+                this.loadDisplayImage()
+            }
+            this.canvas.width = window.innerWidth / 2
+            this.canvas.height = window.innerHeight;
+            this.canvasPosX = window.innerWidth * 0.25;
+            this.wrapper.style.width = this.canvas.width + "px";
+            this.wrapper.style.height = this.canvas.height + "px";
+        }
+    }
+
+    handleFullScreen() {
 
 
-                this.fullScreen = !this.fullScreen;
+        if (this.os === "unknown") {
 
-                if (this.fullScreen !== this.isfullScreen) {
-                    // used esc to leave
-                    this.isfullScreen = this.fullScreen
+            if (!this.fullScreen) {
+                this.oldHeight = this.canvas.height;
+            }
+            this.canvas.width = window.screen.width;
+            this.canvas.height = this.game.maxWidth;
+            this.wrapper.style.height = this.canvas.height + "px"
+
+
+
+            this.fullScreen = !this.fullScreen;
+
+            if (this.fullScreen !== this.isfullScreen) {
+                // used esc to leave
+                this.isfullScreen = this.fullScreen
+            }
+
+            if (!this.fullScreen) {
+                if (window.innerWidth > 813) {
+                    this.canvas.width = window.innerWidth / 2;
+                } else {
+                    this.canvas.width = window.innerWidth;
                 }
 
-                if (!this.fullScreen) {
-                    if (window.innerWidth > 813) {
-                        this.canvas.width = window.innerWidth / 2;
-                    } else {
-                        this.canvas.width = window.innerWidth;
-                    }
-
-                    this.canvas.height = oldHeight;
-                    this.wrapper.style.width = this.canvas.width + "px";
-                    this.wrapper.style.height = this.canvas.height + "px";
-                }
-
-                this.player.setPosX(this.canvas.width / 2);
-                this.player.setPosY(this.canvas.height - this.player.getHeight() - 10);
-            } else {
-                oldHeight = this.canvas.height;
-                this.canvas.height = this.game.maxWidth;
-                this.currentScore.innerText = this.canvas.height;
-
-
-
-                if (this.fullScreen) {
-                    this.canvas.height = this.oldHeight;
-                }
-
-
-
-                this.canvas.width = window.screen.width;
+                this.canvas.height = this.oldHeight;
+                this.wrapper.style.width = this.canvas.width + "px";
                 this.wrapper.style.height = this.canvas.height + "px";
-
             }
 
-        });
+            this.player.setPosX(this.canvas.width / 2);
+            this.player.setPosY(this.canvas.height - this.player.getHeight() - 10);
+        } else {
+            this.oldHeight = this.canvas.height;
+            this.canvas.height = this.game.maxWidth;
 
 
-        window.addEventListener("keypress", (e) => {
-            let key = e.key.toLowerCase();
-            if (this.game.running && !this.game.dead) {
-                if (key === "p") {
-                    this.pause();
 
-                }
+            if (this.fullScreen) {
+                this.canvas.height = this.oldHeight;
             }
-            if (key === "f") {
-                if (!this.game.running) {
-                    this.toggleFullScreen();
-                }
 
-            }
-        });
+
+
+            this.canvas.width = window.screen.width;
+            this.wrapper.style.height = this.canvas.height + "px";
+
+        }
+
+    }
+
+
+    handleScroll() {
+        if (window.scrollY !== 0) {
+            this.startContainer.classList.add("hide");
+        } else {
+            this.startContainer.classList.remove("hide");
+        }
+    }
+
+    loadDisplayImage() {
+        this.displayImg = new Image();
+        this.displayImg.src = require("../Resources/zombie_game_display.png");
+        this.displayImg.onload = () => {
+            this.context.drawImage(this.displayImg, 0, 0, this.canvas.width, this.canvas.height)
+        }
+
+    }
+
+
+    setupMainPage() {
+
+        if (this.game.started) {
+
+            this.game.reset();
+
+            this.currentScore.classList.add("hide");
+            this.pauseButton.classList.add("hide");
+            this.pauseButton.classList.toggle("paused")
+            this.pauseMenu.classList.toggle("hide");
+            this.game.pause = false;
+            document.body.style.overflow = "auto"
+
+
+
+        }
+
+
+        if (this.isfullScreen) {
+            this.toggleFullScreen();
+        }
+
+        this.loadDisplayImage();
+        this.startContainer.classList.remove("hide");
+
+
+
+
     }
 
 
@@ -126,35 +219,30 @@ class GameDisplay {
     start() {
 
 
-
         // TODO: handle what to do
         this.currentScore.classList.remove("hide");
-        this.startContainer.classList.add("hide");
         this.pauseButton.classList.remove("hide");
+        this.startContainer.classList.add("hide");
         // canvas.style.cursor = "none"
         this.game.running = true;
         this.game.started = true;
+        document.body.style.overflow = "hidden"
 
-
-    }
-
-    playAgain() {
-
-
-        this.playAgainButton.classList.toggle("hide");
-        this.playAgainMessage.classList.toggle("hide");
-        this.game.waiting = true;
-        this.player.setHealth(20);
 
 
     }
+
+
 
     hoverOver() {
         this.currentScore.classList.remove("hide");
         this.totalScoreWrapper.classList.add("hide");
+        this.saveScoreContainer.children[2].classList.add("hide")
+        this.saveScoreContainer.children[1].value = "";
         this.pauseButton.classList.remove("hide");
-        this.playAgainButton.classList.toggle("hide");
-        this.playAgainMessage.classList.toggle("hide");
+        this.savedData = false;
+        this.player.setHealth(20);
+
         // canvas.style.cursor = "none"
     }
 
@@ -167,7 +255,8 @@ class GameDisplay {
         this.totalScoreText.innerText = "Total score: " + this.currentScore.innerText;
         this.totalScoreWrapper.classList.remove("hide");
         this.currentScore.classList.add("hide");
-        this.pauseButton.classList.add("hide");
+        // this.pauseButton.classList.add("hide");
+        this.game.waiting = true;
 
     }
 
@@ -209,23 +298,22 @@ class GameDisplay {
         p.innerHTML = "Exit";
         li.appendChild(p)
         this.pauseContainer.appendChild(li);
-        // li.addEventListener("click", () => this.pause());
+        li.addEventListener("click", () => this.setupMainPage());
 
 
     }
 
     toggleFullScreen() {
-        if (!this.game.running) {
 
-            if (this.isfullScreen) {
-                document.exitFullscreen();
-                this.isfullScreen = false;
-            } else {
-                if (this.openFullscreen()) {
-                    this.isfullScreen = true;
-                }
+        if (this.isfullScreen) {
+            document.exitFullscreen();
+            this.isfullScreen = false;
+        } else {
+            if (this.openFullscreen()) {
+                this.isfullScreen = true;
             }
         }
+
     }
 
 

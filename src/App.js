@@ -1,5 +1,7 @@
 import { useLayoutEffect } from 'react';
 import GamePage from './Components/Pages/GamePage';
+import Leaderboard from './Components/Pages/Leaderboard';
+
 import Game from './Game/Main/Game';
 
 function App() {
@@ -11,6 +13,7 @@ function App() {
     return (
         <>
             <GamePage />
+            <Leaderboard/>
         </>
     )
 }

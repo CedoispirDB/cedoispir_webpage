@@ -17,11 +17,17 @@ class Player {
         this.health = health;
 
         this.playerImg = new Image();
-        this.playerImg.src = require("../Resources/player.png");
+        this.playerImg.src = require("../Resources/Player/player.png");
+        this.playerHit1 = new Image();
+        this.playerHit1.src = require("../Resources/Player/player-hit-1.png");
+        this.playerHit2 = new Image();
+        this.playerHit2.src = require("../Resources/Player/player-hit-2.png");
+
+        this.currentImg = this.playerImg;
 
         this.healthBar = new HealthBar(context, canvas);
-        
-       
+
+
 
         this.theta = Math.PI * 3 / 2;
         this.lastPosX = 0;
@@ -40,12 +46,14 @@ class Player {
 
         this.lastTime = 0;
 
+        this.gotPotion = false;
+
     }
 
     setHealth(health) {
 
         this.health = health;
-    
+
         this.healthBar.resetHelth();
         this.hit = false;
 
@@ -127,19 +135,37 @@ class Player {
         });
 
         this.handler.getObjects().forEach(object => {
-            if (this.intersect(object.posX, object.posY, object.width, object.height)) {
-                // this.game.die();
-                if (!this.hit) {
-                    this.healthBar.takeDamage();
-                    this.health -= 2;
-                    this.hit = true;
-                    this.hitTime = time;
-                    this.lastTime = time;
+
+            if (object.type === "vehicle") {
+                if (this.intersect(object.posX, object.posY, object.width, object.height)) {
+
+                    // this.game.die();
+                    if (!this.hit) {
+                        this.healthBar.takeDamage();
+                        this.health -= 2;
+                        this.hit = true;
+                        this.hitTime = time;
+                        this.lastTime = time;
+                    }
+                }
+            } else if (object.type === "potion") {
+                if (object.intersect(this.posX + 6, this.posY + 6, this.playerWidth - 12, this.playerHeight - 12)) {
+                    // console.log(object.posX, object.posY, object.width, object.height)
+                    if (!this.gotPotion && this.health < 20) {
+                        this.health += 2;
+                        // console.log("here")
+                        this.healthBar.increaseHealth();
+                        this.gotPotion = true;
+                            this.handler.removeObject(object.id);
+                    }
+                } else {
+                    this.gotPotion = false;
                 }
             }
-        })
 
-        if(this.health <= 0) {
+        });
+
+        if (this.health <= 0) {
             this.game.die();
         }
 
@@ -168,19 +194,21 @@ class Player {
             if (Math.round(time - this.hitTime) > 1500) {
                 this.hit = false;
                 this.alpha = 1;
-            } else { 
+                this.currentImg = this.playerImg;
+            } else {
                 // console.log(time, this.lastTime, Math.round(time - this.lastTime))
                 if (Math.round(time - this.lastTime) > 175) {
                     this.alpha = this.alpha < 1 ? 1 : 0.7;
                     this.lastTime = time;
+                    this.currentImg = this.currentImg === this.playerHit1 ? this.playerHit2 : this.playerHit1;
                     // console.log(this.alpha)
                 }
             }
         }        // console.log(this.alpha)
         this.context.globalAlpha = this.alpha;
-        this.context.drawImage(this.playerImg, this.posX, this.posY, this.playerWidth, this.playerHeight);
+        this.context.drawImage(this.currentImg, this.posX, this.posY, this.playerWidth, this.playerHeight);
         this.healthBar.render();
-        
+
         // if (!this.intersecting) {
         //     this.context.drawImage(this.playerImg, this.posX, this.posY, this.playerWidth, this.playerHeight);
         //     this.lastPosX = this.posX;
@@ -204,6 +232,7 @@ class Player {
 
 
     intersect(x, y, width, height) {
+
         if (((this.posX >= x && this.posX <= x + width) || (this.posX + this.playerWidth <= x + width && this.posX + this.playerWidth >= x)) &&
             ((this.posY >= y && this.posY <= y + height) || (this.posY + this.playerHeight <= y + height && this.posY + this.playerHeight >= y))) {
             return true;

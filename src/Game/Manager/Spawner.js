@@ -1,4 +1,5 @@
 import BasicZombie from "../Enemies/BasicZombie.js";
+import HealthPotion from "../Items/HealthPotion.js";
 import Car from "../Scenario/Car.js";
 
 class Spanwer {
@@ -10,14 +11,59 @@ class Spanwer {
         this.context = context;
         this.objectId = 0;
         this.enemyId = 0;
-        this.carPositions = [];
+        this.carPositions = []
 
-        this.vehicleOptions = [require("../Resources/black-yellow-car.png"), require("../Resources/black-blue-car.png"), require("../Resources/black-red-car.png")]
+        this.prevTime = 0;
+
+        this.waitVehicle = false;
+
+        this.vehicleOptions = [require("../Resources/Vehicles/black-yellow-car.png"), require("../Resources/Vehicles/black-blue-car.png"), require("../Resources/Vehicles/black-red-car.png")]
+        this.zombieImgPath = require("../Resources/Enemies/basic-zombie-sprite.png");;
     }
 
-    createWave(amount) {
-        this.createObjects(amount);
-        this.creatEnemies(amount);
+    createWave(time) {
+        if (this.prevTime !== time) {
+            console.log(time);
+            if (time % 6 === 0) {
+                if (this.waitVehicle) {
+                    this.waitVehicle = false;
+                    this.createRandomEnemies(4);
+                } else if (!this.waitVehicle) {
+                    this.createObjects(4);
+                    this.creatEnemies(4);
+                    this.waitVehicle = true;
+
+                }
+            } else if (time % 3 === 0) {
+                this.createRandomEnemies(4);
+
+            } else if (time % 10 === 0) {
+                console.log("r")
+                this.createPotions(1);
+            }
+            this.prevTime = time;
+        }
+
+    }
+
+    createPotions(amount) {
+        for (var i = 0; i < amount; i++) 
+        {
+            this.handler.addObject(new HealthPotion(this.context, (Math.random() * (this.canvas.width - 10)) + 5, -19, 14, 19, "potion", this.objectId));
+            this.objectId++;
+        }
+        console.log(this.handler.objects)
+
+    }
+
+    createRandomEnemies(amount) {
+
+        for (var i = 0; i < amount; i++) {
+
+            this.handler.addEnemy(new BasicZombie(this.game, this.context, this.canvas, this.handler, 40, 42, (Math.random() * (this.canvas.width - 40 - 10) + 10), -42, (Math.random() * 2) + 3, (Math.random() * 2) + 2, this.enemyId, Math.round((Math.random() * 2)) + 2, this.zombieImgPath));
+            this.enemyId++;
+        }
+
     }
 
     creatEnemies(amount) {
@@ -59,7 +105,7 @@ class Spanwer {
 
             // console.log(x);
 
-            this.handler.addEnemy(new BasicZombie(this.game, this.context, this.canvas, this.handler, 40, 42, x, -42, (Math.random() * 2) + 3, (Math.random() * 2) + 2, this.enemyId, Math.round((Math.random() * 2)) + 2, require("../Resources/zombie.png")));
+            this.handler.addEnemy(new BasicZombie(this.game, this.context, this.canvas, this.handler, 40, 42, x, -42, (Math.random() * 2) + 3, (Math.random() * 2) + 2, this.enemyId, Math.round((Math.random() * 2)) + 2, this.zombieImgPath));
             this.enemyId++;
 
             oldMax = max;
@@ -72,7 +118,7 @@ class Spanwer {
 
     createObjects(amount) {
         let carWidth = 52;
-        let xi = (Math.random() * this.canvas.width / 2)
+        let xi = (Math.random() * this.canvas.width / 4)
         let xf = (Math.random() * (this.canvas.width - this.canvas.width / 2)) + this.canvas.width / 2;
         // console.log(amount)
 
@@ -85,7 +131,7 @@ class Spanwer {
             this.carPositions.push([x, x + carWidth])
 
             // require(this.vehicleOptions[Math.floor(Math.random() * this.vehicleOptions.length)])
-            this.handler.addObject(new Car(this.context, this.canvas, this.handler, carWidth, 124, x, -124 * 2, (Math.random() * 2) + 4, this.vehicleOptions[Math.floor(Math.random() * this.vehicleOptions.length)], this.objectId));
+            this.handler.addObject(new Car(this.context, this.canvas, this.handler, carWidth, 124, x, -124 * 2, (Math.random() * 2) + 4, this.vehicleOptions[Math.floor(Math.random() * this.vehicleOptions.length)], this.objectId, "vehicle"));
             this.objectId++;
 
 

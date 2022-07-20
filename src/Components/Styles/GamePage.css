@@ -2,6 +2,26 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    
+
+}
+
+section {
+    /* border: 1px solid white; */
+    /* z-index: 3; */
+}
+
+.body, html {
+    background-color: #303030;
+    /* overflow: hidden; */
+
+}
+
+
+.container {
+    background: #303030;
+    z-index: -1;
+
 }
 
 #canvas {
@@ -11,13 +31,14 @@
     /* background-color: pink; */
     /* cursor: none; */
 
-
+    /* border-right: 2px solid white; */
+    /* border-left: 2px solid white; */
 }
 
 body {
     margin: 0;
     padding: 0;
-    background-color: rgba(0, 0, 0, 0.05);
+  
 }
 
 img {
@@ -51,6 +72,8 @@ img {
     top: auto;
     padding-bottom: 5px;
     margin-bottom: 10px;
+    border-radius: 10px;
+
 }
 
 .total_score_wrapper {
@@ -66,6 +89,10 @@ img {
     position: absolute;
     width: 100%;
     bottom: 5%;
+
+}
+.start_button {
+    border-radius: 10px;
 }
 
 .text {
@@ -85,6 +112,7 @@ img {
 .wrapper {
     left: 25%;
     position: relative;
+    z-index: 1;
 }
 
 .icon {
@@ -126,6 +154,8 @@ img {
     transform: translate(-50%, -50%);
     width: 50%;
     height: fit-content;
+    border-radius: 10px;
+
 
 }
 
@@ -159,6 +189,8 @@ img {
     padding: 9px;
     left: 50%;
     transform: translateX(-50%);
+    margin-top: 10px;
+    border-radius: 10px;
 }
 
 .pause_continue_msg{
@@ -203,9 +235,76 @@ img {
     display: none;
 }
 
+.save_score_container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: white;
+    color: black;
+    box-shadow: 0 0 20px 4px #777;
+    width: fit-content;
+    margin: 0 auto;
+    border-radius: 10px;
+    padding: 20px 0;
+    border: 2px solid black;
+    text-align: center;
+}
+
+.save_score_title{
+    margin-bottom: 10px;
 
 
-@media only screen and (max-width: 813px) {
+}
+
+.save_username_input {
+    width: 50%;
+    border: none;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    font-family: mild;
+    font-size: 1.2em;
+    color: black;
+    outline: solid 2px black;
+
+
+
+}
+
+.save_username_input:focus {
+    outline: solid 2px rgba(0, 0, 0, 0.5);
+
+}
+
+
+
+.save_score_button {
+    width: fit-content;
+    border: none;
+    border-radius: 5px;
+    padding: 3px 10px 1px 10px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    font-family: mild;
+    font-size: 1em;
+    background-color: black;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+
+}
+
+.save_score_button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.score_message {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 413px) {
     .total_score {
         font-size: 37px;
     }

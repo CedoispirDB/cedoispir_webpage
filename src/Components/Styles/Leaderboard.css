@@ -1,0 +1,157 @@
+.leaderboard_container {
+    background-color: #303030;
+    width: 100%;
+    height: 100vh;
+    /* border-top: 1px solid white; */
+    top: -2px;
+    position: relative;
+    z-index: 2;
+}
+
+.title {
+    color: white;
+    font-family: mild;
+    text-align: center;
+    font-size: 2.5em;
+    padding-top: 2%;
+    margin-bottom: 5%;
+    text-decoration: underline;
+}
+
+.leaderboard_box {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 1px;
+    margin: 0 auto;
+    position: relative;
+    min-width: 30%;
+    width: fit-content;
+    height: fit-content;
+    min-height: 40%;
+    background-color: #171717;
+    color: white;
+    box-shadow: 0 0 20px 4px #777;
+}
+
+.name_list,
+.score_list {
+    list-style: none;
+    font-size: 1.5em;
+
+}
+
+.name_container,
+.score_container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: fit-content;
+}
+
+.name_container {
+    /* display: grid; */
+    /* grid-template-columns: auto auto; */
+    /* left: 50%;
+    position: relative;
+    width:50%; */
+    /* background-color: red; */
+    /* grid-row-start: 2; */
+    margin-left: 20px;
+}
+
+.name_list {
+    display: inline;
+    text-align: center;
+    /* padding: ; */
+    position: relative;
+    left: 1px;
+}
+
+.score_container {
+    /* width: 50%; */
+    /* background-color: blue; */
+    margin-right: 20px;
+
+}
+
+.score_list {
+    text-align: center;
+    right: 1px;
+    position: relative;
+
+}
+
+.name_container > h2, .score_container > h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+.name_list>li {
+    border-right: none;
+}
+
+
+li {
+    padding: 5px;
+    border: 1px solid white;
+}
+
+hr {
+    background-color: black;
+    opacity: 0.7;
+    border: none;
+    position: relative;
+    z-index: 999;
+    height: 7px;
+
+}
+
+.line1 {
+    margin-top: 10px;
+    width: 100%;
+    height: 7px;
+
+}
+
+.line2 {
+    margin-top: 5px;
+    width: 70%;
+
+}
+
+.line3 {
+    margin-top: 5px;
+    width: 40%;
+}
+
+.line4 {
+    margin-top: 5px;
+    width: 40%;
+    margin-left: 60%;
+}
+
+.line5 {
+    margin-top: 5px;
+    width: 70%;
+    margin-left: 30%;
+}
+
+.line6 {
+    margin-top: 5px;
+    width: 100%;
+    /* margin-left: ; */
+}
+
+@media only screen and (max-width: 784px) {
+    .leaderboard_box {
+        width: 50%;
+    }
+
+}
+
+@media only screen and (max-width: 412px) {
+    .leaderboard_box {
+        width: 70%;
+    }
+
+}
