@@ -164,7 +164,7 @@ class Game {
         this.gameDisplay.loadDeathScreen();
         this.running = false;
         this.dead = true;
-        this.trackScore = 1;
+        this.trackScore = 0;
         this.gameDisplay.setScore(0)
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.background.render();
@@ -186,7 +186,7 @@ class Game {
 
                 this.trackScore += 1 / 25;
 
-                // this.spawner.createWave(this.timeSec);
+                this.spawner.createWave(this.timeSec);
 
                 this.gameDisplay.setScore(Math.floor(this.trackScore));
 

@@ -8,6 +8,7 @@ class PlayerMovement {
 
         this.isInside = false;
         this.firsRotation = true;
+        this.range = 40;
     }
 
     handleTouchMovement(e) {
@@ -77,7 +78,7 @@ class PlayerMovement {
 
 
         } else if (this.game.waiting && this.game.dead) {
-            if (e.clientY >= this.canvas.height - this.player.getHeight() - 10) {
+            if (e.clientY >= this.canvas.height - this.player.getHeight() - this.range) {
                 if (!this.isInside && !this.firsRotation) {
                     this.game.dead = false;
                     this.game.running = true;
@@ -92,6 +93,7 @@ class PlayerMovement {
                 if (this.firsRotation) {
                     this.firsRotation = false;
                     this.isInside = false;
+                    this.range = 20;
                 }
             }
 

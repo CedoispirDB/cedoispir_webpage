@@ -28,7 +28,9 @@
     width: fit-content;
     height: fit-content;
     min-height: 40%;
-    max-height: 57.3%;
+    /* max-height: 57.3%;
+     */
+    max-height: fit-content;
     background-color: #171717;
     color: white;
     box-shadow: 0 0 20px 4px #777;

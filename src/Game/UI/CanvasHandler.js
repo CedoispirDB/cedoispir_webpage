@@ -11,7 +11,7 @@ class CanvasHandler {
         this.canvasPosX = window.innerWidth * 0.25;
         this.canvas.width = window.innerWidth / 2;
 
-        if (window.innerWidth < 813) {
+        if (window.innerWidth <= 545) {
             this.canvas.width = window.innerWidth;
             this.canvasPosX = 0;
         }

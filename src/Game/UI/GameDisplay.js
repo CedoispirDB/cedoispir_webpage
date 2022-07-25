@@ -104,6 +104,11 @@ class GameDisplay {
             this.canvas.width = window.innerWidth / 2
             this.canvas.height = window.innerHeight;
             this.canvasPosX = window.innerWidth * 0.25;
+            if (window.innerWidth <= 545) {
+                this.canvas.width = window.innerWidth;
+                this.canvasPosX = 0;
+            }
+
             this.wrapper.style.width = this.canvas.width + "px";
             this.wrapper.style.height = this.canvas.height + "px";
         }
@@ -111,7 +116,7 @@ class GameDisplay {
 
     handleFullScreen() {
 
-        if(!this.game.started) {
+        if (!this.game.started) {
             this.loadDisplayImage();
         }
 
@@ -226,12 +231,10 @@ class GameDisplay {
 
 
     setScore(score) {
-        // if (this.game.running) {
-        //     this.currentGameScore = score;
-        //     this.currentScore.innerText = score;
-        // }
-
-
+        if (this.game.running) {
+            this.currentGameScore = score;
+            this.currentScore.innerText = score;
+        }
     }
 
 
@@ -269,7 +272,7 @@ class GameDisplay {
         this.continueMessage.classList.toggle("hide");
     }
 
-    setText(x, y ) {
+    setText(x, y) {
         this.totalScoreText.innerText = x + " " + y;
     }
 

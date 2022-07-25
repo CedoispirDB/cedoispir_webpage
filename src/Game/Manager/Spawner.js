@@ -37,7 +37,6 @@ class Spanwer {
                 this.createRandomEnemies(4);
 
             } else if (time % 10 === 0) {
-                console.log("r")
                 this.createPotions(1);
             }
             this.prevTime = time;
@@ -48,7 +47,7 @@ class Spanwer {
     createPotions(amount) {
         for (var i = 0; i < amount; i++) 
         {
-            this.handler.addObject(new HealthPotion(this.context, (Math.random() * (this.canvas.width - 10)) + 5, -19, 14, 19, "potion", this.objectId));
+            this.handler.addObject(new HealthPotion(this.context, (Math.random() * (this.canvas.width - 10)) + 5, -19, 18, 22, "potion", this.objectId));
             this.objectId++;
         }
 
