@@ -40,26 +40,26 @@ function Leaderboard({ amount }) {
 
 
 
-    // useLayoutEffect(() => {
-    //     let nameList = document.querySelector(".name_list");
-    //     let scoreList = document.querySelector(".score_list");
+    useLayoutEffect(() => {
+        let nameList = document.querySelector(".name_list");
+        let scoreList = document.querySelector(".score_list");
 
-    //     getAllPlayersData(amount)
-    //         .then((res) => {
+        getAllPlayersData(amount)
+            .then((res) => {
 
-    //             let arr = res.data.response;
-    //             quickSort(arr, 0, arr.length);
-    //             for (var i = 0; i < arr.length; i++) {
-    //                 let nameLi = document.createElement("li");
-    //                 let scoreLi = document.createElement("li");
-    //                 nameLi.innerText = arr[i].PlayerName.S;
-    //                 scoreLi.innerText = arr[i].Score.S;
-    //                 nameList.append(nameLi);
-    //                 scoreList.append(scoreLi);
-    //             }
-    //         });
+                let arr = res.data.response;
+                quickSort(arr, 0, arr.length);
+                for (var i = 0; i < arr.length; i++) {
+                    let nameLi = document.createElement("li");
+                    let scoreLi = document.createElement("li");
+                    nameLi.innerText = arr[i].PlayerName.S;
+                    scoreLi.innerText = arr[i].Score.S;
+                    nameList.append(nameLi);
+                    scoreList.append(scoreLi);
+                }
+            });
 
-    // })
+    })
 
 
     return (
@@ -79,16 +79,7 @@ function Leaderboard({ amount }) {
                         <h2>Name</h2>
                         {/* Max chars in name: 9 */}
                         <ul className='name_list'>
-                            <li>Marco</li>
-                            <li>Bia</li>
-                            <li>Julia</li>
-                            <li>Natalia</li>
-                            <li>Bianca</li>
-                            <li>Luana</li>
-                            <li>Augie</li>
-                            <li>Dudu</li>
-                            <li>Tata</li>
-                            <li>Gigi</li>
+                            
                         </ul>
                     </div>
 
@@ -96,16 +87,7 @@ function Leaderboard({ amount }) {
                         <h2>Score</h2>
 
                         <ul className='score_list'>
-                            <li>10</li>
-                            <li>9</li>
-                            <li>8</li>
-                            <li>7</li>
-                            <li>6</li>
-                            <li>5</li>
-                            <li>4</li>
-                            <li>3</li>
-                            <li>2</li>
-                            <li>1</li>
+                         
                         </ul>
 
 

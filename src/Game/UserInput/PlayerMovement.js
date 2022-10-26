@@ -137,7 +137,7 @@ class PlayerMovement {
 
     setEvents() {
         window.addEventListener("touchmove", (e) => this.handleTouchMovement(e), { passive: false });
-        window.addEventListener("mousemove", (e) => this.handleMouseMovement(e));
+        window.addEventListener("mousemove ", (e) => this.handleMouseMovement(e));
         // addEventListener("keydown", (e) => {
         //     console.log(e.key)
         //     if(e.key + "" === "ArrowUp") {

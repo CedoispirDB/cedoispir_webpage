@@ -2,6 +2,8 @@ import { savePlayerData } from "../../ApiHandler";
 
 class GameDisplay {
 
+    #LOCAL_STORAGE_KEY = "api_call_count"
+
     static isfullScreen;
     static fullScreen;
 
@@ -19,8 +21,10 @@ class GameDisplay {
 
         document.getElementsByClassName("save_score_button")[0].addEventListener("click", () => {
             // console.log(document.getElementsByClassName("save_username_input")[0].value);
-            if (!this.savedData) {
+            this.loadFromLocalStorage();
+            if (!this.reachedLimit) {
                 this.callApi();
+            } else {
             }
         });
 
@@ -61,7 +65,26 @@ class GameDisplay {
         window.addEventListener('scroll', () => this.handleScroll());
 
         this.currentGameScore = 1;
+
+        this.reachedLimit = false;
     }
+
+    loadFromLocalStorage() {
+        const stored = JSON.parse(localStorage.getItem(this.#LOCAL_STORAGE_KEY));
+        if (stored !== null) {
+            if (Math.abs((new Date().getHours()) - stored.time) == 1) {
+                localStorage.removeItem(this.#LOCAL_STORAGE_KEY);
+                this.reachedLimit = false;
+            } else {
+                this.reachedLimit = true;
+                this.saveScoreContainer.children[2].classList.remove("hide")
+                this.saveScoreContainer.children[2].innerText = "Saving limit reached"
+            }
+        }
+    }
+
+
+
 
     async callApi() {
 
@@ -70,11 +93,13 @@ class GameDisplay {
             .then((res) => {
                 this.saveScoreContainer.children[2].classList.remove("hide")
                 if (res.data.response === "Error") {
+                    console.log("here")
                     console.log(this.saveScoreContainer.children[0]);
                     this.saveScoreContainer.children[2].innerText = "Name already in use"
                 } else {
                     this.saveScoreContainer.children[2].innerText = "Score saved"
-                    this.savedData = true;
+                    this.reachedLimit = true;
+                    localStorage.setItem(this.#LOCAL_STORAGE_KEY, JSON.stringify({ time: (new Date()).getHours() }))
                 }
             });
 
