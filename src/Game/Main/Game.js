@@ -35,7 +35,7 @@ class Game {
         this.handler = new Handler();
         this.spawner = new Spanwer(this, this.handler, this.canvas, this.canvasPosX, this.context);
 
-        this.player = new Player(this, this.canvas.width / 2, this.canvas.height - 42, 40, 42, this.canvas, this.canvasPosX, this.context, this.handler, 2);
+        this.player = new Player(this, this.canvas.width / 2, this.canvas.height - 42, 40, 42, this.canvas, this.canvasPosX, this.context, this.handler, 20);
 
 
         this.gameDisplay = new GameDisplay(this, this.player, this.os, this.canvas, this.context, this.canvasPosX);

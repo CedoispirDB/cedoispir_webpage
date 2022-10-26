@@ -51,7 +51,6 @@ class Player {
         this.deathPosX = 0;
         this.deathPosY = 0;
 
-
     }
 
     setHealth(health) {
@@ -60,6 +59,8 @@ class Player {
 
         this.healthBar.resetHelth();
         this.hit = false;
+        console.log(this.health)
+
 
     }
 

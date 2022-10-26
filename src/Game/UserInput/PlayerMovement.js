@@ -97,7 +97,7 @@ class PlayerMovement {
                 }
             }
 
-            console.log(this.isInside)
+            // console.log(this.isInside)
 
             // if (e.clientY >= this.canvas.height - this.player.getHeight() - 10) {
 
@@ -116,7 +116,7 @@ class PlayerMovement {
 
             // console.log("here 0");
 
-            console.log(x, this.player.getPosX());
+            // console.log(x, this.player.getPosX());
 
             if (x > this.player.getPosX() && x < this.player.getPosX() + this.player.getWidth() &&
                 y > this.player.getPosY() && y < this.player.getPosY() + this.player.getHeight()) {
@@ -136,8 +136,10 @@ class PlayerMovement {
     }
 
     setEvents() {
-        window.addEventListener("touchmove", (e) => this.handleTouchMovement(e), { passive: false });
-        window.addEventListener("mousemove ", (e) => this.handleMouseMovement(e));
+        // console.log("here")
+        // window.addEventListener("touchmove", (e) => this.handleTouchMovement(e), { passive: false });
+        window.addEventListener("mousemove", (e) => this.handleMouseMovement(e));
+
         // addEventListener("keydown", (e) => {
         //     console.log(e.key)
         //     if(e.key + "" === "ArrowUp") {
