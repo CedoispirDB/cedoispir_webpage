@@ -10,7 +10,6 @@ class Spanwer {
         this.canvasPosX = canvasPosX;
         this.context = context;
         this.objectId = 0;
-        this.enemyId = 0;
         this.carPositions = []
 
         this.prevTime = 0;
